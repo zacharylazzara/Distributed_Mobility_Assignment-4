@@ -39,8 +39,6 @@ app.get("/api/items", (req, res) => {
     )
 })
 
-// TODO: Rename all this to items
-
 // GET ONE
 app.get("/api/items/:item_name", (req,res) => {
     res.status(501).send("Not implemented")
