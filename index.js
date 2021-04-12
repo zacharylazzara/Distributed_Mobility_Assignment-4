@@ -53,16 +53,23 @@ app.get("/api/items/:item_name", (req,res) => {
 // INSERT 
 app.post("/api/items", (req, res) => {
     if ("name" in req.body && "rarity" in req.body) {
-        // TODO: make sure it doesn't already exist in database
-
-
-
-
-        Item.create([req.body]).then((results) => {
-            res.status(201).send({msg:`successfully created ${results["_id"]}`})
+        // Since there will never be two items with the same name, make sure the name is unique
+        Item.findOne(req.body.name).exec().then((item) => {
+            console.log(item)
+            if (item === null) {
+                Item.create([req.body]).then((results) => {
+                    console.log(results)
+                    res.status(201).send({msg:`successfully created ${results.id}`})
+                }).catch((e) => {
+                    console.log(e)
+                    res.status(500).send("error creating item")
+                })
+            } else {
+                res.status(404).send({msg:`cannot create "${req.body.name}", as it already exists with ID ${item.id}`})
+            }
         }).catch((e) => {
             console.log(e)
-            res.status(500).send("error creating item")
+            res.status(500).send("error checking items")
         })
     } else {
         res.status(401).send({msg:"name and rarity are required"})
