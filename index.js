@@ -37,7 +37,7 @@ app.get("/api/items", (req, res) => {
 
 // GET ONE
 app.get("/api/items/:item_name", (req,res) => {
-    Item.findOne({"name":req.params.item_name}).exec().then((results) => {
+    Item.findOne({"name":req.params.item_name}).select(["-_id", "-__v"]).exec().then((results) => {
         console.log(results)
         if (results === null) {
             res.status(404).send({err:`'${req.params.item_name}' not found`})
