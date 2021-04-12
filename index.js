@@ -67,13 +67,13 @@ app.post("/api/items", (req, res) => {
 
 // DELETE
 app.delete("/api/items/:item_name", (req,res) => {
-    Item.findOneAndDelete(req.params.item_name).exec().then((results) => {
+    Item.findOneAndDelete({"name":req.params.item_name}).exec().then((results) => {
         console.log(`Attempting to delete ${req.params.item_name}`)
         if (results === null) {
             res.status(404).send({msg:`"${req.params.item_name}" not found`})
         } else {
             console.log(`Successfully deleted ${results}`)
-            res.send({msg:`successfully deleted ID: ${results._id}`})
+            res.send({msg:`successfully deleted ${results.name} with ID: ${results._id}`})
         }
     }).catch((e) => {
         console.log(e)
