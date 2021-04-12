@@ -53,36 +53,15 @@ app.get("/api/items/:item_name", (req,res) => {
 // INSERT 
 app.post("/api/items", (req, res) => {
     if ("name" in req.body && "rarity" in req.body) {
-        // Since there will never be two items with the same name, make sure the name is unique
-        // Item.findOne(req.body.name).exec().then((item) => {
-        //     console.log(item)
-        //     if (item === null) {
-        //         Item.create([req.body]).then((results) => {
-        //             console.log(results)
-        //             res.status(201).send({msg:`successfully created ${results.id}`})
-        //         }).catch((e) => {
-        //             console.log(e)
-        //             res.status(500).send("error creating item")
-        //         })
-        //     } else {
-        //         res.status(404).send({msg:`cannot create "${req.body.name}", as it already exists with ID ${item.id}`})
-        //     }
-        // }).catch((e) => {
-        //     console.log(e)
-        //     res.status(500).send("error checking items")
-        // })
-
         Item.create([req.body]).then((results) => {
-            console.log(results)
-            console.log(results._id)
-            console.log(results[0]._id)
-            res.status(201).send({msg:`successfully created ${results._id}`})
+            console.log(`Created ${results.length} documents:\n${results}`)
+            res.status(201).send({msg:`successfully created ${results.length} documents`, results})
         }).catch((e) => {
             console.log(e)
             res.status(500).send("error creating item")
         })
     } else {
-        res.status(401).send({msg:"name and rarity are required"})
+        res.status(401).send({msg:`"name" and "rarity" are required fields`})
     }
 })
 
