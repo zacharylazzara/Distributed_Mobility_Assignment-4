@@ -58,7 +58,7 @@ app.post("/api/items", (req, res) => {
             res.status(201).send({msg:`successfully created ${results.length} document(s)`, results})
         }).catch((e) => {
             console.log(e)
-            res.status(500).send("error creating item")
+            res.status(500).send({err:"error creating item(s)"})
         })
     } else {
         res.status(401).send({err:`'name' and 'rarity' are required fields`})
@@ -70,7 +70,7 @@ app.delete("/api/items/:item_name", (req,res) => {
     Item.findOneAndDelete({"name":req.params.item_name}).exec().then((results) => {
         console.log(`Attempting to delete ${req.params.item_name}`)
         if (results === null) {
-            res.status(404).send({msg:`'${req.params.item_name}' not found`})
+            res.status(404).send({err:`'${req.params.item_name}' not found`})
         } else {
             console.log(`Successfully deleted ${results}`)
             res.send({msg:`successfully deleted ${results.name} with ID: ${results._id}`})
