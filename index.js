@@ -54,7 +54,7 @@ app.get("/api/items/:item_name", (req,res) => {
 app.post("/api/items", (req, res) => {
     if ("name" in req.body && "rarity" in req.body) {
         Item.create([req.body]).then((results) => {
-            res.status(201).send({msg:`successfully created ${results._id}`})
+            res.status(201).send({msg:`successfully created ${results}`})
         }).catch((e) => {
             console.log(e)
             res.status(500).send("error creating item")
