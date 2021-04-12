@@ -26,7 +26,7 @@ const HTTP_PORT = process.env.PORT || 8080;
 // ----------------------------------
 // GET ALL
 app.get("/api/items", (req, res) => {
-    Item.find().exec().then((results) => {
+    Item.find().select(["-_id", "-__v"]).exec().then((results) => {
         console.log(results)
         res.send(results)
     }).catch((e) => {
@@ -50,7 +50,7 @@ app.get("/api/items/:item_name", (req,res) => {
     })
 })
 
-// INSERT 
+// INSERT
 app.post("/api/items", (req, res) => {
     var valid = true
     var input = req.body
@@ -66,7 +66,7 @@ app.post("/api/items", (req, res) => {
     });
 
     if (valid) {
-        Item.create(input).then((results) => {
+        Item.create(input).select("-__v").then((results) => {
             console.log(`Created ${results.length} document(s):\n${results}`)
             res.status(201).send({msg:`successfully created ${results.length} document(s)`, results})
         }).catch((e) => {
@@ -80,13 +80,13 @@ app.post("/api/items", (req, res) => {
 
 // DELETE
 app.delete("/api/items/:item_name", (req,res) => {
-    Item.findOneAndDelete({"name":req.params.item_name}).exec().then((results) => {
+    Item.findOneAndDelete({"name":req.params.item_name}).select(["_id", "name"]).exec().then((results) => {
         console.log(`Attempting to delete ${req.params.item_name}`)
         if (results === null) {
             res.status(404).send({err:`'${req.params.item_name}' not found`})
         } else {
             console.log(`Successfully deleted ${results}`)
-            res.send({msg:`successfully deleted ${results.name} with ID: ${results._id}`})
+            res.send({msg:`successfully deleted document`, results})
         }
     }).catch((e) => {
         console.log(e)
