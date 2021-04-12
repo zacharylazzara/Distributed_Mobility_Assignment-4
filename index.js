@@ -53,21 +53,20 @@ app.get("/api/items/:item_name", (req,res) => {
 // INSERT 
 app.post("/api/items", (req, res) => {
     var valid = true
+    var input = req.body
 
-    if (Array.isArray(req.body)) {
-        req.body.forEach(item => {
-            if (!("name" in item && "rarity" in item)) {
-                valid = false
-            } 
-        });
-    } else {
+    if (!Array.isArray(input)) {
+        input = [input]
+    }
+
+    input.forEach(item => {
         if (!("name" in item && "rarity" in item)) {
             valid = false
         } 
-    }
+    });
 
     if (valid) {
-        Item.create([req.body]).then((results) => {
+        Item.create(input).then((results) => {
             console.log(`Created ${results.length} document(s):\n${results}`)
             res.status(201).send({msg:`successfully created ${results.length} document(s)`, results})
         }).catch((e) => {
