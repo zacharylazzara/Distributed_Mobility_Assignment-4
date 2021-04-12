@@ -26,39 +26,62 @@ const HTTP_PORT = process.env.PORT || 8080;
 // ----------------------------------
 // GET ALL
 app.get("/api/items", (req, res) => {
-    Item.find().exec().then(
-        (results) => {
-            console.log(results)
-            res.send(results)
-        }
-    ).catch(
-        (e) => {
-            console.log(e)
-            res.status(500).send("Error getting items")
-        }
-    )
+    Item.find().exec().then((results) => {
+        console.log(results)
+        res.send(results)
+    }).catch((e) => {
+        console.log(e)
+        res.status(500).send("error getting items")
+    })
 })
 
 // GET ONE
 app.get("/api/items/:item_name", (req,res) => {
-    res.status(501).send("Not implemented")
+    Item.findOne(req.params.item_name).exec().then((results) => {
+        console.log(results)
+        if (results === null) {
+            res.status(404).send({msg:`"${req.params.item_name}" not found`})
+        } else {
+            res.send(results)
+        }
+    }).catch((e) => {
+        console.log(e)
+        res.status(500).send("error getting items")
+    })
 })
 
 // INSERT 
 app.post("/api/items", (req, res) => {
-    res.status(501).send("Not implemented")
+    if ("name" in req.body && "rarity" in req.body) {
+        Item.create(req.body).exec().then((results) => {
+            res.status(201).send({msg:`successfully created ${results}`})
+        }).catch((e) => {
+            console.log(e)
+            res.status(500).send("error creating item")
+        })
+    } else {
+        res.status(401).send({msg:"name and rarity are required"})
+    }
 })
 
-// UPDATE BY ID
-app.put("/api/items/:item_id", (req,res) => {
-    res.status(501).send("Not implemented")
-})
-
-// DELETE BY ID
+// DELETE
 app.delete("/api/items/:item_name", (req,res) => {
-    res.status(501).send("Not implemented")
+    Item.findOneAndDelete(req.params.item_name).exec().then((results) => {
+        if (results === null) {
+            res.status(404).send({msg:`"${req.params.item_name}" not found`})
+        } else {
+            res.send({msg:`successfully deleted ${results}`})
+        }
+    }).catch((e) => {
+        console.log(e)
+        res.status(500).send("error deleting item")
+    })
 })
 
+// UPDATE
+app.put("/api/items/:item_id", (req,res) => {
+    res.status(501).send("not implemented")
+})
 
 // ----------------------------------
 // Connect to Database & Start Server
