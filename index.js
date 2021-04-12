@@ -66,7 +66,7 @@ app.post("/api/items", (req, res) => {
     });
 
     if (valid) {
-        Item.create(input).select("-__v").then((results) => {
+        Item.create(input).then((results) => {
             console.log(`Created ${results.length} document(s):\n${results}`)
             res.status(201).send({msg:`successfully created ${results.length} document(s)`, results})
         }).catch((e) => {
@@ -81,7 +81,6 @@ app.post("/api/items", (req, res) => {
 // DELETE
 app.delete("/api/items/:item_name", (req,res) => {
     Item.findOneAndDelete({"name":req.params.item_name}).select(["_id", "name"]).exec().then((results) => {
-        console.log(`Attempting to delete ${req.params.item_name}`)
         if (results === null) {
             res.status(404).send({err:`'${req.params.item_name}' not found`})
         } else {
