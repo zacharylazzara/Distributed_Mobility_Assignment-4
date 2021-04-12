@@ -25,11 +25,9 @@ const HTTP_PORT = process.env.PORT || 8080;
 // Endpoints
 // ----------------------------------
 // DEFAULT
-app.get("*", (req, res) => {
+app.get("/", (req, res) => {
     res.status(404).send({err:"not found"})
 })
-
-
 
 // GET ALL
 app.get("/api/items", (req, res) => {
