@@ -100,7 +100,7 @@ app.put("/api/items/:item_id", (req,res) => {
 
 // DEFAULT
 app.get("*", (req, res) => {
-    res.status(404).send({err:"not found"})
+    res.status(404).send({err:"endpoint not found"})
 })
 
 // ----------------------------------
