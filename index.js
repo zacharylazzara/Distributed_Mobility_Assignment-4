@@ -20,13 +20,17 @@ const express = require("express");
 const app = express();
 app.use(express.json())
 const HTTP_PORT = process.env.PORT || 8080;
-app.use((req, res) => {
-    res.status(404).send({err:"not found"})
-})
 
 // ----------------------------------
 // Endpoints
 // ----------------------------------
+// DEFAULT
+app.get("*", (req, res) => {
+    res.status(404).send({err:"not found"})
+})
+
+
+
 // GET ALL
 app.get("/api/items", (req, res) => {
     Item.find().select(["-_id", "-__v"]).exec().then((results) => {
