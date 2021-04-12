@@ -53,8 +53,13 @@ app.get("/api/items/:item_name", (req,res) => {
 // INSERT 
 app.post("/api/items", (req, res) => {
     if ("name" in req.body && "rarity" in req.body) {
+        // TODO: make sure it doesn't already exist in database
+
+
+
+
         Item.create([req.body]).then((results) => {
-            res.status(201).send({msg:`successfully created ${results}`})
+            res.status(201).send({msg:`successfully created ${req._id}`})
         }).catch((e) => {
             console.log(e)
             res.status(500).send("error creating item")
