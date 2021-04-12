@@ -59,7 +59,7 @@ app.post("/api/items", (req, res) => {
 
 
         Item.create([req.body]).then((results) => {
-            res.status(201).send({msg:`successfully created ${req._id}`})
+            res.status(201).send({msg:`successfully created ${results["_id"]}`})
         }).catch((e) => {
             console.log(e)
             res.status(500).send("error creating item")
